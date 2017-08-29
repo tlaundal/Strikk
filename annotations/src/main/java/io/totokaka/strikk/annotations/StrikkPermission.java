@@ -13,6 +13,8 @@ import java.lang.annotation.Target;
  *
  * This annotation should only be applied to methods that return a {@link Permission}
  * and takes no arguments, in an interface annotated with {@link StrikkPermissions}.
+ * All fields with this annotation will have the permission declared in the generated
+ * plugin.yml.
  */
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.CLASS)

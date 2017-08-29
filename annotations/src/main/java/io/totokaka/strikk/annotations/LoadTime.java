@@ -2,6 +2,8 @@ package io.totokaka.strikk.annotations;
 
 /**
  * Times a plugin may be loaded during startup.
+ *
+ * Used by the {@link StrikkPlugin} annotation.
  */
 public enum LoadTime {
 

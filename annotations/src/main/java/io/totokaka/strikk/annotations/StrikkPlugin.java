@@ -13,6 +13,7 @@ import java.lang.annotation.Target;
  * <p>
  *     This annotation should only be applied to classes that extend {@link JavaPlugin},
  *     and there may only be one instance of this annotation for each compiled module.
+ *     The info declared in the annotation will be used to generate the plugin.yml file.
  * </p>
  */
 @Target({ElementType.TYPE})

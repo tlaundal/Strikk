@@ -2,6 +2,8 @@ package io.totokaka.strikk.annotations;
 
 /**
  * Possible default values for a Permission node.
+ *
+ * Used by the {@link StrikkPermission} annotation.
  */
 public enum PermissionDefault {
 

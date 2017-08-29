@@ -9,6 +9,7 @@ import java.lang.annotation.Target;
  * A command definition.
  *
  * This annotation should only be applied to classes implementing {@link org.bukkit.command.CommandExecutor}.
+ * All CommandExecutors annotated with this will have their commands declared in the generated plugin.yml file.
  */
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.CLASS)

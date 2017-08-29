@@ -4,7 +4,8 @@ package io.totokaka.strikk.annotations;
  * A reference to a {@link StrikkPermission}.
  *
  * The purpose of this annotation is to make refactoring permissions safer, and
- * introduce some type checking to permission references.
+ * introduce some type checking to permission references. Currently used in the
+ * {@link StrikkCommand} annotation.
  */
 public @interface PermissionReference {
 
