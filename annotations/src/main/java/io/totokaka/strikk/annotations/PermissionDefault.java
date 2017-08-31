@@ -10,12 +10,12 @@ public enum PermissionDefault {
     /**
      * Indicates this permission defaults to true for all {@link org.bukkit.permissions.Permissible}s.
      */
-    TRUE("true"),
+    TRUE(true),
 
     /**
      * Indicates this permission defaults to false for all {@link org.bukkit.permissions.Permissible}s.
      */
-    FALSE("false"),
+    FALSE(false),
 
     /**
      * Indicates this permission defaults to true for all operators.
@@ -27,9 +27,9 @@ public enum PermissionDefault {
      */
     NOT_OP("not op");
 
-    private final String value;
+    private final Object value;
 
-    PermissionDefault(String value) {
+    PermissionDefault(Object value) {
         this.value = value;
     }
 
@@ -40,7 +40,7 @@ public enum PermissionDefault {
      *
      * @return The name Bukkit uses for this permission default value
      */
-    public String getValue() {
+    public Object getValue() {
         return value;
     }
 }
