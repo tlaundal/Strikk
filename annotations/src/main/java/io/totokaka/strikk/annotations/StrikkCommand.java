@@ -64,6 +64,6 @@ public @interface StrikkCommand {
      *
      * @return The permission node required to invoke this command
      */
-    PermissionReference permission() default @PermissionReference(parent = Void.class, name = "");
+    String permission() default "";
 
 }
