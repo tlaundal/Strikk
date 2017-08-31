@@ -108,38 +108,9 @@ public @interface StrikkPlugin {
     /**
      * A list of plugins this plugin depends on.
      *
-     * <p>
-     *     Other plugins are identified by their name. If not all these plugins
-     *     are available at server start, this plugin will not be loaded.
-     * </p>
-     *
      * @return Plugins this plugin depends on
      */
-    String[] depend() default {};
-
-    /**
-     * A list of plugins this plugin should load after.
-     *
-     * <p>
-     *     Other plugins are identified by their name. This plugin will be loaded
-     *     after the plugins specified here, if they exists on the server.
-     * </p>
-     *
-     * @return Plugins this plugin soft depends on
-     */
-    String[] softDepend() default {};
-
-    /**
-     * A list of plugins this plugin should be loaded before.
-     *
-     * <p>
-     *     The plugins listed here will be loaded after this plugin. The other plugins
-     *     are identified by their name.
-     * </p>
-     *
-     * @return A list of plugins that should be loaded after this plugin
-     */
-    String[] loadBefore() default {};
+    Dependency[] depend() default {};
 
     /**
      * The logging prefix for this plugin's logger.

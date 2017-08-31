@@ -38,27 +38,19 @@ public @interface StrikkPermission {
     String description() default "";
 
     /**
-     * Child permissions that will be set to true for {@link Permissible}s
-     * that have this permission set to true.
+     * Child permissions of this permission.
      *
-     * @return Child permissions that will be set to true
+     * @return Child permissions of this permission
      */
-    String[] trueChildren() default {};
-
-    /**
-     * Child permissions that will be set to false for {@link Permissible}s
-     * that have this permission set to true.
-     *
-     * @return Child permissions that will be set to false
-     */
-    String[] falseChildren() default {};
+    ChildPermissionReference[] children() default {};
 
     /**
      * The default value for this permission.
      *
      * This decides the default value of this permission node on {@link Permissible}s that do not
      * have this permission defined.
-     * @return
+     *
+     * @return The default access for this permission
      */
     PermissionDefault defaultAccess() default PermissionDefault.OP;
 

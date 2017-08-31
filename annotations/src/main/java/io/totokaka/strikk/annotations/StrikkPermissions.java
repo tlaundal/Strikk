@@ -17,17 +17,19 @@ import java.lang.annotation.Target;
 public @interface StrikkPermissions {
 
     /**
-     * The name of the generated class that will implement this interface.
-     *
-     * @return The name of the class that will implement this interface
-     */
-    String target();
-
-    /**
      * The base path for all permissions defined in this class.
      *
      * @return The base path for all permissions in this class
      */
     String base();
+
+    /**
+     * The name of the generated class that will implement this interface.
+     *
+     * Defaults to the name of the interface suffixed with "Implementation"
+     *
+     * @return The name of the class that will implement this interface
+     */
+    String target() default "";
 
 }
