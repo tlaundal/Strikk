@@ -4,6 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Strikk.iml" filepath="$PROJECT_DIR$/Strikk.iml" />
       <module fileurl="file://$PROJECT_DIR$/annotations/Strikk-annotations.iml" filepath="$PROJECT_DIR$/annotations/Strikk-annotations.iml" />
+      <module fileurl="file://$PROJECT_DIR$/example/Strikk-example.iml" filepath="$PROJECT_DIR$/example/Strikk-example.iml" />
+      <module fileurl="file://$PROJECT_DIR$/processor/Strikk-processor.iml" filepath="$PROJECT_DIR$/processor/Strikk-processor.iml" />
     </modules>
   </component>
 </project>

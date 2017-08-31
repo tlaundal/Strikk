@@ -8,6 +8,13 @@
         <outputRelativeToContentRoot value="true" />
         <module name="Strikk-annotations" />
       </profile>
+      <profile name="Annotation profile for Strikk-example" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processor name="io.totokaka.strikk.processor.StrikkProcessor" />
+        <module name="Strikk-example" />
+      </profile>
       <profile name="Annotation profile for strikk" enabled="true">
         <sourceOutputDir name="target/generated-sources" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
@@ -19,6 +26,7 @@
     <bytecodeTargetLevel>
       <module name="Strikk" target="1.8" />
       <module name="Strikk-annotations" target="1.8" />
+      <module name="Strikk-example" target="1.8" />
       <module name="Strikk-processor" target="1.8" />
     </bytecodeTargetLevel>
   </component>
