@@ -39,6 +39,9 @@ public class StrikkProcessor extends AbstractProcessor {
     private Map<String, Object> pluginYaml;
     private Set<Element> relatedElements;
 
+    private Set<String> knownPermissions;
+    private Map<String, Element> referencedChildPermissions;
+
     @Override
     public synchronized void init(ProcessingEnvironment processingEnvironment) {
         super.init(processingEnvironment);
@@ -54,6 +57,9 @@ public class StrikkProcessor extends AbstractProcessor {
         yaml = new Yaml(options);
         pluginYaml = new HashMap<>();
         relatedElements = new HashSet<>();
+
+        knownPermissions = new HashSet<>();
+        referencedChildPermissions = new HashMap<>();
     }
 
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
@@ -157,7 +163,19 @@ public class StrikkProcessor extends AbstractProcessor {
                 pluginYaml.put("permissions", permissions);
             }
 
-            new StrikkPermissionHolder(parent, permission, method).dump(permissions);
+            StrikkPermissionHolder holder = new StrikkPermissionHolder(parent, permission, method);
+            for (String child : holder.children()) {
+                referencedChildPermissions.put(child, element);
+            }
+            holder.dump(permissions);
+        }
+        knownPermissions = ((Map<String, Object>)pluginYaml.getOrDefault("permissions", new HashMap())).keySet();
+
+        for (Map.Entry<String, Element> reference : referencedChildPermissions.entrySet()) {
+            if (!knownPermissions.contains(reference.getKey())) {
+                messager.printMessage(Diagnostic.Kind.MANDATORY_WARNING,
+                        "@ChildPermission referenced uknown permission", reference.getValue());
+            }
         }
     }
 
@@ -185,7 +203,12 @@ public class StrikkProcessor extends AbstractProcessor {
             }
 
             StrikkCommand command = element.getAnnotation(StrikkCommand.class);
-            new StrikkCommandHolder(command).dump(commands);
+            StrikkCommandHolder holder = new StrikkCommandHolder(command);
+            if (!holder.hasKnownPermission(knownPermissions)) {
+                messager.printMessage(Diagnostic.Kind.MANDATORY_WARNING,
+                        "@StrikkCommand references uknown permission", element);
+            }
+            holder.dump(commands);
         }
     }
 

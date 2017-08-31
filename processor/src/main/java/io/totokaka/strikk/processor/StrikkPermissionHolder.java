@@ -5,8 +5,11 @@ import io.totokaka.strikk.annotations.StrikkPermission;
 import io.totokaka.strikk.annotations.StrikkPermissions;
 
 import javax.lang.model.element.ExecutableElement;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class StrikkPermissionHolder {
 
@@ -51,5 +54,11 @@ public class StrikkPermissionHolder {
             name += element.getSimpleName().toString();
         }
         target.put(name, permissionMap);
+    }
+
+    public List<String> children() {
+        return Arrays.stream(permission.children())
+                .map(ChildPermissionReference::name)
+                .collect(Collectors.toList());
     }
 }

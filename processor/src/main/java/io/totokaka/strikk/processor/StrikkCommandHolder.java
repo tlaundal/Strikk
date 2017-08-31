@@ -4,6 +4,7 @@ import io.totokaka.strikk.annotations.StrikkCommand;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class StrikkCommandHolder {
 
@@ -37,5 +38,13 @@ public class StrikkCommandHolder {
         }
 
         target.put(command.name(), commandMap);
+    }
+
+    public boolean hasKnownPermission(Set<String> knownPermissions) {
+        if (command.permission().length() == 0) {
+            return true;
+        }
+
+        return knownPermissions.contains(command.permission());
     }
 }
