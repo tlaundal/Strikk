@@ -1,4 +1,4 @@
-package io.totokaka.strikk.example;
+package io.totokaka.strikk.example.permissions;
 
 import io.totokaka.strikk.annotations.ChildPermissionReference;
 import io.totokaka.strikk.annotations.PermissionDefault;
@@ -7,9 +7,9 @@ import io.totokaka.strikk.annotations.StrikkPermissions;
 import org.bukkit.permissions.Permission;
 
 @StrikkPermissions(
-        base = IPermissions.BASE
+        base = CommandPermissions.BASE
 )
-public interface IPermissions {
+public interface CommandPermissions {
 
     String BASE = "strikkexample.commands";
     String ALL = ".*";

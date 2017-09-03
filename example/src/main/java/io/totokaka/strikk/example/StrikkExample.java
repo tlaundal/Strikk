@@ -1,7 +1,10 @@
 package io.totokaka.strikk.example;
 
 import io.totokaka.strikk.annotations.StrikkPlugin;
+import io.totokaka.strikk.example.dagger.DaggerComponent;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import javax.inject.Inject;
 
 @StrikkPlugin(
         name = "StrikkExample",
@@ -9,10 +12,19 @@ import org.bukkit.plugin.java.JavaPlugin;
 )
 public class StrikkExample extends JavaPlugin {
 
-    @Override
-    public void onEnable() {
-        super.onEnable();
+    @Inject
+    Strikk strikk;
 
-        getCommand(AccessCommand.NAME).setExecutor(new AccessCommand());
+    @Override
+    public void onLoad() {
+        super.onLoad();
+
+        DaggerComponent.builder()
+                .bind(this)
+                .build()
+                .inject(this);
+
+        strikk.register(this);
     }
+
 }
