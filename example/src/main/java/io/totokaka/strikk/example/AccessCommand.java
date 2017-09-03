@@ -9,7 +9,7 @@ import org.bukkit.command.CommandSender;
         name = AccessCommand.NAME,
         description = "Gives access",
         usage = "/<command>",
-        permission = IPermissions.BASE + "." + IPermissions.ACCESS
+        permission = IPermissions.BASE + IPermissions.ACCESS
 )
 public class AccessCommand implements CommandExecutor {
 

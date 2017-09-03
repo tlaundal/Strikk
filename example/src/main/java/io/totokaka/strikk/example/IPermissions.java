@@ -12,15 +12,15 @@ import org.bukkit.permissions.Permission;
 public interface IPermissions {
 
     String BASE = "strikkexample.commands";
-    String ALL = "*";
-    String ACCESS = "access";
+    String ALL = ".*";
+    String ACCESS = ".access";
 
     @StrikkPermission(
             name = ALL,
             description = "Gives access to all commands",
             defaultAccess = PermissionDefault.FALSE,
             children = {
-                    @ChildPermissionReference(name = BASE + "." + ACCESS)
+                    @ChildPermissionReference(name = ACCESS)
             }
     )
     Permission all();
