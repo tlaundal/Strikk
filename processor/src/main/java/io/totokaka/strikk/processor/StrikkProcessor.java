@@ -43,6 +43,8 @@ public class StrikkProcessor extends AbstractProcessor {
     private Types typeUtil;
     private Filer filer;
 
+    private boolean hasGenerated;
+
     private Yaml yaml;
     private Map<String, Object> pluginYaml;
     private Set<Element> relatedElements;
@@ -57,6 +59,8 @@ public class StrikkProcessor extends AbstractProcessor {
     @Override
     public synchronized void init(ProcessingEnvironment processingEnvironment) {
         super.init(processingEnvironment);
+
+        hasGenerated = false;
 
         messager = processingEnvironment.getMessager();
         typeUtil = processingEnvironment.getTypeUtils();
@@ -78,31 +82,34 @@ public class StrikkProcessor extends AbstractProcessor {
     }
 
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-        boolean claims = processStrikkPluginAnnotation(roundEnv);
-        if (!claims) {
+        if (annotations.contains(Utils.getType(StrikkPlugin.class))) {
+            processStrikkPluginAnnotation(roundEnv);
+        }
+
+        if (plugin == null) {
             messager.printMessage(Diagnostic.Kind.WARNING, "Did not process any @StrikkPlugin annotations");
             return false;
         }
 
-        processStrikkPermissionsAnnotation(roundEnv);
-        processStrikkPermissionAnnotation(roundEnv);
-        processStrikkCommandAnnotation(roundEnv);
-
-        try {
-            writePermissionsImplementation(roundEnv);
-        } catch (IOException e) {
-            messager.printMessage(Diagnostic.Kind.ERROR,
-                    "Could not write permission implementation: " + e.getLocalizedMessage());
-            e.printStackTrace();
+        if (annotations.contains(Utils.getType(StrikkPermissions.class))) {
+            processStrikkPermissionsAnnotation(roundEnv);
+        }
+        if (annotations.contains(Utils.getType(StrikkPermission.class))) {
+            processStrikkPermissionAnnotation(roundEnv);
+        }
+        if (annotations.contains(Utils.getType(StrikkCommand.class))) {
+            processStrikkCommandAnnotation(roundEnv);
         }
 
-        if (roundEnv.processingOver()) {
+        if (!hasGenerated) {
             try {
-                writePluginYaml();
+                writePermissionsImplementation(roundEnv);
                 writeStrikk();
+                writePluginYaml();
+                hasGenerated = true;
             } catch (IOException e) {
                 messager.printMessage(Diagnostic.Kind.ERROR,
-                        "Could not write file: " + e.getLocalizedMessage());
+                        "Could not write plugin.yml: " + e.getLocalizedMessage());
                 e.printStackTrace();
             }
         }
@@ -199,10 +206,7 @@ public class StrikkProcessor extends AbstractProcessor {
 
         JavaFile javaFile = JavaFile.builder(pack, strikk).build();
 
-        FileObject fileObject = filer.createSourceFile(javaFile.packageName + "." + strikk.name);
-        Writer writer = fileObject.openWriter();
-        javaFile.writeTo(writer);
-        writer.close();
+        javaFile.writeTo(filer);
     }
 
     private void writePermissionsImplementation(RoundEnvironment roundEnv) throws IOException {
@@ -249,11 +253,8 @@ public class StrikkProcessor extends AbstractProcessor {
                     .build();
 
             JavaFile javaFile = JavaFile.builder(packageElement.getQualifiedName().toString(), implementation).build();
+            javaFile.writeTo(filer);
             permissionImplementations.put(type, javaFile);
-            FileObject fileObject = filer.createSourceFile(javaFile.packageName + "." + implementation.name);
-            Writer writer = fileObject.openWriter();
-            javaFile.writeTo(writer);
-            writer.close();
         }
     }
 
