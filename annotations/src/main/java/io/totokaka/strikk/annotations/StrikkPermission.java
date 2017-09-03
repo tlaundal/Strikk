@@ -26,6 +26,8 @@ public @interface StrikkPermission {
      * By default the name of the annotated method will be used. The base defined in
      * the {@link StrikkPermissions} will be added before this name to create the node path.
      *
+     * Any leading dots will be removed.
+     *
      * @return The name of this permission
      */
     String name() default "";

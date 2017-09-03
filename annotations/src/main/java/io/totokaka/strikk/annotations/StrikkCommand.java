@@ -62,6 +62,8 @@ public @interface StrikkCommand {
     /**
      * The permission node required to invoke this command.
      *
+     * This should be the complete permission path.
+     *
      * @return The permission node required to invoke this command
      */
     String permission() default "";

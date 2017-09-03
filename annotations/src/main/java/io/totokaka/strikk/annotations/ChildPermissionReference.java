@@ -8,7 +8,9 @@ public @interface ChildPermissionReference {
     /**
      * The name of the referenced permission.
      *
-     * This should be the complete name of the permission.
+     * The name may start with a dot, in which case it is resolved
+     * relative to the base path used on the {@code @StrikkPermission}
+     * this is a child of.
      *
      * @return The name of the referenced permission
      */
