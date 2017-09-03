@@ -1,4 +1,4 @@
-package io.totokaka.strikk.processor;
+package io.totokaka.strikk.processor.holders;
 
 import io.totokaka.strikk.annotations.Dependency;
 import io.totokaka.strikk.annotations.StrikkPlugin;

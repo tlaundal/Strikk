@@ -1,20 +1,23 @@
-package io.totokaka.strikk.processor;
+package io.totokaka.strikk.processor.holders;
 
 import io.totokaka.strikk.annotations.StrikkCommand;
 
+import javax.lang.model.element.TypeElement;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 public class StrikkCommandHolder {
 
+    private final TypeElement type;
     private final StrikkCommand command;
 
-    public StrikkCommandHolder(StrikkCommand command) {
+    public StrikkCommandHolder(TypeElement element, StrikkCommand command) {
+        this.type = element;
         this.command = command;
     }
 
-    void dump(Map<String, Object> target) {
+    public void dump(Map<String, Object> target) {
         Map<String, Object> commandMap = new HashMap<>();
 
         if (command.description().length() > 0) {
@@ -46,5 +49,13 @@ public class StrikkCommandHolder {
         }
 
         return knownPermissions.contains(command.permission());
+    }
+
+    public TypeElement getType() {
+        return type;
+    }
+
+    public StrikkCommand getCommand() {
+        return command;
     }
 }

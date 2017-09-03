@@ -1,4 +1,4 @@
-package io.totokaka.strikk.processor;
+package io.totokaka.strikk.processor.holders;
 
 import io.totokaka.strikk.annotations.ChildPermissionReference;
 import io.totokaka.strikk.annotations.StrikkPermission;
@@ -41,24 +41,34 @@ public class StrikkPermissionHolder {
                 permissionMap.put("children", childrenMap);
             }
 
-            new ChildPermissionReferenceHolder(permissionReference).dump(childrenMap);
+            new ChildPermissionReferenceHolder(parent, permissionReference).dump(childrenMap);
         }
 
+        target.put(resolveName(), permissionMap);
+    }
+
+    public String resolveName() {
         String name = "";
+
         if (parent.base().length() > 0) {
             name = parent.base() + ".";
         }
+
         if (permission.name().length() > 0) {
             name += permission.name();
         } else {
             name += element.getSimpleName().toString();
         }
-        target.put(name, permissionMap);
+
+        name = name.replaceAll("\\.+", ".");
+
+        return name;
     }
 
     public List<String> children() {
         return Arrays.stream(permission.children())
-                .map(ChildPermissionReference::name)
+                .map(ref -> new ChildPermissionReferenceHolder(parent, ref))
+                .map(ChildPermissionReferenceHolder::resolveName)
                 .collect(Collectors.toList());
     }
 }
