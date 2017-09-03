@@ -117,9 +117,18 @@ public class StrikkProcessor extends AbstractProcessor {
         MethodSpec.Builder injectedConstructorBuilder = MethodSpec.constructorBuilder()
                 .addAnnotation(Inject.class);
 
+        PackageElement parent = (PackageElement) plugin.getEnclosingElement();
+        String pack = parent.getQualifiedName().toString();
+
+        boolean hasCommands = false;
         ParameterSpec pluginManagerParam = ParameterSpec.builder(PluginManager.class, "pluginManager").build();
         MethodSpec.Builder plainConstructorBuilder = MethodSpec.constructorBuilder()
                 .addParameter(pluginManagerParam);
+
+        ParameterSpec pluginParam = ParameterSpec.builder(JavaPlugin.class, "plugin").build();
+        MethodSpec.Builder registerBuilder = MethodSpec.methodBuilder("register")
+                .returns(ClassName.get(pack, "Strikk"))
+                .addParameter(pluginParam);
 
         for (Map.Entry<TypeElement, JavaFile> entry : permissionImplementations.entrySet()) {
             JavaFile javaFile = entry.getValue();
@@ -145,15 +154,50 @@ public class StrikkProcessor extends AbstractProcessor {
             plainConstructorBuilder.addStatement("this.$N = new $T($N)", field, typeName, pluginManagerParam);
         }
 
-        TypeSpec strikk = TypeSpec.classBuilder("Strikk")
+        for (StrikkCommandHolder command : commands) {
+            TypeElement type = command.getType();
+            boolean hasInjectConstructor = false;
+            for (Element element : type.getEnclosedElements()) {
+                if (element.getKind() != ElementKind.CONSTRUCTOR) {
+                    continue;
+                }
+                if (element.getAnnotation(Inject.class) != null) {
+                    hasInjectConstructor = true;
+                    break;
+                }
+            }
+            if (!hasInjectConstructor) {
+                continue;
+            }
+            hasCommands = true;
+
+            FieldSpec field = FieldSpec.builder(TypeName.get(type.asType()), type.getSimpleName().toString())
+                    .addModifiers(Modifier.PRIVATE, Modifier.FINAL).build();
+            fields.add(field);
+
+            ParameterSpec param = ParameterSpec.builder(TypeName.get(type.asType()), type.getSimpleName().toString()).build();
+            injectedConstructorBuilder.addParameter(param)
+                    .addStatement("this.$N = $N", field, param);
+
+            registerBuilder.addStatement("$N.getCommand($S).setExecutor(this.$N)", pluginParam,
+                    command.getCommand().name(), field);
+        }
+
+        registerBuilder.addStatement("return this");
+
+        TypeSpec.Builder strikkBuilder = TypeSpec.classBuilder("Strikk")
                 .addModifiers(Modifier.PUBLIC)
                 .addFields(fields)
-                .addMethod(injectedConstructorBuilder.build())
-                .addMethod(plainConstructorBuilder.build())
-                .addMethods(methods).build();
+                .addMethods(methods)
+                .addMethod(injectedConstructorBuilder.build());
+        if (hasCommands) {
+            strikkBuilder.addMethod(registerBuilder.build());
+        } else {
+            strikkBuilder.addMethod(plainConstructorBuilder.build());
+        }
+        TypeSpec strikk = strikkBuilder.build();
 
-        PackageElement parent = (PackageElement) plugin.getEnclosingElement();
-        JavaFile javaFile = JavaFile.builder(parent.getQualifiedName().toString(), strikk).build();
+        JavaFile javaFile = JavaFile.builder(pack, strikk).build();
 
         FileObject fileObject = filer.createSourceFile(javaFile.packageName + "." + strikk.name);
         Writer writer = fileObject.openWriter();
