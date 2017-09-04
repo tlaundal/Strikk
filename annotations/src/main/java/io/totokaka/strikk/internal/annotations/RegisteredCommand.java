@@ -1,4 +1,4 @@
-package io.totokaka.strikk.annotations.internal;
+package io.totokaka.strikk.internal.annotations;
 
 import io.totokaka.strikk.annotations.StrikkCommand;
 

@@ -1,4 +1,4 @@
-package io.totokaka.strikk.annotations.internal;
+package io.totokaka.strikk.internal.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
