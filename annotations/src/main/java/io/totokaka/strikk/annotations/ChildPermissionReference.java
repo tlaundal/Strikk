@@ -14,7 +14,7 @@ public @interface ChildPermissionReference {
      *
      * @return The name of the referenced permission
      */
-    String name();
+    String value();
 
     /**
      * Whether this is a positive child.
