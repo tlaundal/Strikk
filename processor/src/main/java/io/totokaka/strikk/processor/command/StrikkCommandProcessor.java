@@ -50,7 +50,7 @@ public class StrikkCommandProcessor extends AbstractProcessor {
         StrikkCommand annotation = element.getAnnotation(StrikkCommand.class);
         StrikkCommandInterpreter interpreter = new StrikkCommandInterpreter(element, annotation);
 
-        CommandRegistrantGenerator generator = new CommandRegistrantGenerator(utils);
+        CommandRegistrantGenerator generator = new CommandRegistrantGenerator();
 
         generator.setOriginalAnnotation(annotation);
         generator.setCommandName(interpreter.getName());

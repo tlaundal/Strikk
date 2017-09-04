@@ -2,10 +2,9 @@ package io.totokaka.strikk.processor.command;
 
 import com.squareup.javapoet.*;
 import io.totokaka.strikk.annotations.StrikkCommand;
-import io.totokaka.strikk.processor.Utils;
-import io.totokaka.strikk.annotations.internal.Registerable;
-import io.totokaka.strikk.annotations.internal.RegisteredCommand;
-import io.totokaka.strikk.annotations.internal.Registrant;
+import io.totokaka.strikk.internal.annotations.Registerable;
+import io.totokaka.strikk.internal.annotations.RegisteredCommand;
+import io.totokaka.strikk.internal.annotations.Registrant;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.inject.Inject;
@@ -17,18 +16,13 @@ import javax.lang.model.element.TypeElement;
  */
 public class CommandRegistrantGenerator {
 
-    private final Utils utils;
-
     private AnnotationSpec registeredCommandAnnotation;
     private FieldSpec commandField;
-    private ParameterSpec commandParameter;
+    private MethodSpec constructor;
+    private MethodSpec registerMethod;
 
     private String commandName;
     private String implementationName;
-
-    public CommandRegistrantGenerator(Utils utils) {
-        this.utils = utils;
-    }
 
     public void setOriginalAnnotation(StrikkCommand originalAnnotation) {
         AnnotationSpec original = AnnotationSpec.get(originalAnnotation);
@@ -45,27 +39,29 @@ public class CommandRegistrantGenerator {
 
     public void setType(TypeElement type) {
         TypeName typeName = TypeName.get(type.asType());
+
         this.commandField = FieldSpec.builder(typeName, "executor")
                 .addModifiers(Modifier.PRIVATE, Modifier.FINAL)
                 .build();
-        this.commandParameter = ParameterSpec.builder(typeName, "executor")
-                .build();
-    }
 
-    public TypeSpec generate() {
-        MethodSpec constructor = MethodSpec.constructorBuilder()
-                .addAnnotation(Inject.class)
-                .addParameter(commandParameter)
-                .addStatement("this.$N = $N", commandField, commandParameter)
-                .build();
-
-        MethodSpec registerMethod = MethodSpec.methodBuilder("register")
+        this.registerMethod = MethodSpec.methodBuilder("register")
                 .addAnnotation(Override.class)
                 .addParameter(JavaPlugin.class, "plugin")
                 .addModifiers(Modifier.PUBLIC)
                 .addStatement("$N.getCommand($S).setExecutor($N)", "plugin", commandName, commandField)
                 .build();
 
+        ParameterSpec commandParameter = ParameterSpec.builder(typeName, "executor")
+                .build();
+
+        this.constructor = MethodSpec.constructorBuilder()
+                .addAnnotation(Inject.class)
+                .addParameter(commandParameter)
+                .addStatement("this.$N = $N", commandField, commandParameter)
+                .build();
+    }
+
+    public TypeSpec generate() {
         return TypeSpec.classBuilder(implementationName)
                 .addSuperinterface(Registrant.class)
                 .addAnnotation(Registerable.class)
