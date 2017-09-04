@@ -1,4 +1,4 @@
-package io.totokaka.strikk.processor.annotations;
+package io.totokaka.strikk.annotations.internal;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
