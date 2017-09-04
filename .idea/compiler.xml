@@ -8,12 +8,6 @@
         <outputRelativeToContentRoot value="true" />
         <module name="Strikk-annotations" />
         <module name="Strikk-example" />
-      </profile>
-      <profile name="Annotation profile for strikk" enabled="true">
-        <sourceOutputDir name="target/generated-sources" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processor name="com.google.auto.service.processor.AutoServiceProcessor" />
         <module name="Strikk-processor" />
       </profile>
     </annotationProcessing>
