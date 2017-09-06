@@ -2,6 +2,7 @@ package io.totokaka.strikk.example;
 
 import io.totokaka.strikk.annotations.StrikkPlugin;
 import io.totokaka.strikk.example.dagger.DaggerComponent;
+import io.totokaka.strikk.example.permissions.CommandPermissionsImplementation;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.inject.Inject;
@@ -18,6 +19,13 @@ public class StrikkExample extends JavaPlugin {
     @Override
     public void onLoad() {
         super.onLoad();
+
+/*
+        strikk = new Strikk(
+                new CommandPermissionsImplementation(getServer().getPluginManager()),
+                new AccessRegistrant(new AccessCommand()),
+                new ExampleListenerRegistrant(new ExampleListener()));
+*/
 
         DaggerComponent.builder()
                 .bind(this)
