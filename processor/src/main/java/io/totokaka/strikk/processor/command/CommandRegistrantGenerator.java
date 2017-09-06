@@ -34,6 +34,8 @@ public class CommandRegistrantGenerator {
     public void setCommandName(String commandName) {
         this.commandName = commandName;
         this.implementationName = commandName + "Registrant";
+
+        this.implementationName = String.valueOf(this.implementationName.charAt(0)).toUpperCase() + implementationName.substring(1);
     }
 
 
