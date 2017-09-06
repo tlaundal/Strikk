@@ -20,7 +20,7 @@ public interface CommandPermissions {
             description = "Gives access to all commands",
             defaultAccess = PermissionDefault.FALSE,
             children = {
-                    @ChildPermissionReference(name = ACCESS)
+                    @ChildPermissionReference(ACCESS)
             }
     )
     Permission all();
