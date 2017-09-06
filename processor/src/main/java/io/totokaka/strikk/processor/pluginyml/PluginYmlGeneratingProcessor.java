@@ -5,6 +5,7 @@ import io.totokaka.strikk.annotations.Dependency;
 import io.totokaka.strikk.annotations.StrikkPlugin;
 import io.totokaka.strikk.internal.annotations.RegisteredCommand;
 import io.totokaka.strikk.internal.annotations.RegisteredPermission;
+import io.totokaka.strikk.processor.StrikkPackage;
 import io.totokaka.strikk.processor.Utils;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -33,6 +34,7 @@ public class PluginYmlGeneratingProcessor extends AbstractProcessor {
     private Filer filer;
     private Utils utils;
     private Types typeUtils;
+    private Elements elementUtils;
     private Messager messager;
 
     private PluginYmlGenerator generator;
@@ -46,6 +48,7 @@ public class PluginYmlGeneratingProcessor extends AbstractProcessor {
         this.filer = processingEnvironment.getFiler();
         this.utils = new Utils(processingEnvironment.getElementUtils());
         this.messager = processingEnvironment.getMessager();
+        this.elementUtils = processingEnvironment.getElementUtils();
         this.typeUtils = processingEnvironment.getTypeUtils();
 
         this.generator = new PluginYmlGenerator();
@@ -107,6 +110,8 @@ public class PluginYmlGeneratingProcessor extends AbstractProcessor {
             messager.printMessage(Diagnostic.Kind.ERROR, "@StrikkPlugin class is not extending JavaPlugin",
                     element);
         }
+
+        StrikkPackage.setPackageName(elementUtils.getPackageOf(element).getQualifiedName().toString());
 
         StrikkPlugin annotation = element.getAnnotation(StrikkPlugin.class);
         StrikkPluginInterpreter interpreter = new StrikkPluginInterpreter(element, annotation);
