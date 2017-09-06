@@ -4,15 +4,16 @@ import com.google.auto.service.AutoService;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.TypeSpec;
 import io.totokaka.strikk.processor.Utils;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;
-import javax.lang.model.element.Element;
-import javax.lang.model.element.ElementKind;
-import javax.lang.model.element.ExecutableElement;
-import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.*;
+import javax.lang.model.type.ExecutableType;
+import javax.lang.model.type.TypeKind;
+import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
 import java.io.IOException;
@@ -79,6 +80,7 @@ public class EventHandlerProcessor extends AbstractProcessor {
     }
 
     private void processListener(TypeElement type) {
+        checkMethods(type);
         ListenerRegistrantGenerator generator = new ListenerRegistrantGenerator();
 
         generator.setType(type);
@@ -92,6 +94,36 @@ public class EventHandlerProcessor extends AbstractProcessor {
             messager.printMessage(Diagnostic.Kind.ERROR,
                     "Could not write listener registrant: " + e.getLocalizedMessage(), type);
             e.printStackTrace();
+        }
+    }
+
+    private void checkMethods(TypeElement type) {
+        for (Element child : type.getEnclosedElements()) {
+            if (child.getKind() != ElementKind.METHOD) {
+                continue;
+            }
+            ExecutableType method = (ExecutableType) child.asType();
+
+            if (!method.getReturnType().getKind().equals(TypeKind.VOID)) {
+                continue;
+            }
+
+            if (method.getParameterTypes().size() != 1) {
+                continue;
+            }
+
+            TypeMirror param = method.getParameterTypes().get(0);
+            if (!typeUtil.isAssignable(param, utils.getType(Event.class).asType())) {
+                continue;
+            }
+
+            if (child.getAnnotation(EventHandler.class) != null) {
+                continue;
+            }
+
+            messager.printMessage(Diagnostic.Kind.MANDATORY_WARNING,
+                    "Method in Listener looks like an event handler, but does not have @EventHandler " +
+                            "annotation", child);
         }
     }
 
