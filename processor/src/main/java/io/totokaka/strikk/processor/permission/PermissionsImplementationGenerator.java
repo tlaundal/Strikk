@@ -5,12 +5,14 @@ import io.totokaka.strikk.annotations.ChildPermissionReference;
 import io.totokaka.strikk.annotations.PermissionDefault;
 import io.totokaka.strikk.internal.annotations.Fetchable;
 import io.totokaka.strikk.internal.annotations.RegisteredPermission;
+import io.totokaka.strikk.processor.Utils;
 import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.PluginManager;
 
 import javax.inject.Inject;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -41,22 +43,14 @@ public class PermissionsImplementationGenerator {
 
     public void addChild(String methodName, String name, String description, PermissionDefault defaultAccess,
                          ChildPermissionReference[] children) {
-        CodeBlock.Builder childrenCodeBlockBuilder = CodeBlock.builder()
-                .add("{");
-        for (int i = 0; i < children.length; i++) {
-            childrenCodeBlockBuilder.add(CodeBlock.of("$L", AnnotationSpec.get(children[i])));
-            if (i + 1 < children.length) {
-                childrenCodeBlockBuilder.add(", ");
-            }
-        }
-        childrenCodeBlockBuilder.add("}");
-
         AnnotationSpec annotation = AnnotationSpec.builder(RegisteredPermission.class)
                 .addMember("name", "$S", name)
                 .addMember("description", "$S", description)
                 .addMember("defaultAccess", "$T.$L", PermissionDefault.class, defaultAccess.name())
-                .addMember("children", "$L", childrenCodeBlockBuilder.build())
+                .addMember("children", "$L", Utils.arrayDeclaration(
+                        Arrays.stream(children).map(AnnotationSpec::get).toArray()))
                 .build();
+
         MethodSpec implementation = MethodSpec.methodBuilder(methodName)
                 .addModifiers(Modifier.PUBLIC)
                 .addAnnotation(annotation)
