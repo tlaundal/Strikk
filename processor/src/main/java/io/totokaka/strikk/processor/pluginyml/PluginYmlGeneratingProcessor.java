@@ -6,11 +6,14 @@ import io.totokaka.strikk.annotations.StrikkPlugin;
 import io.totokaka.strikk.internal.annotations.RegisteredCommand;
 import io.totokaka.strikk.internal.annotations.RegisteredPermission;
 import io.totokaka.strikk.processor.Utils;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.util.Elements;
+import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
 import javax.tools.FileObject;
 import javax.tools.StandardLocation;
@@ -29,6 +32,7 @@ public class PluginYmlGeneratingProcessor extends AbstractProcessor {
 
     private Filer filer;
     private Utils utils;
+    private Types typeUtils;
     private Messager messager;
 
     private PluginYmlGenerator generator;
@@ -42,6 +46,7 @@ public class PluginYmlGeneratingProcessor extends AbstractProcessor {
         this.filer = processingEnvironment.getFiler();
         this.utils = new Utils(processingEnvironment.getElementUtils());
         this.messager = processingEnvironment.getMessager();
+        this.typeUtils = processingEnvironment.getTypeUtils();
 
         this.generator = new PluginYmlGenerator();
     }
@@ -98,7 +103,10 @@ public class PluginYmlGeneratingProcessor extends AbstractProcessor {
         }
         processedPlugin = element;
 
-        // TODO - verify element is assignable from JavaPlugin
+        if (!typeUtils.isAssignable(element.asType(), utils.getType(JavaPlugin.class).asType())) {
+            messager.printMessage(Diagnostic.Kind.ERROR, "@StrikkPlugin class is not extending JavaPlugin",
+                    element);
+        }
 
         StrikkPlugin annotation = element.getAnnotation(StrikkPlugin.class);
         StrikkPluginInterpreter interpreter = new StrikkPluginInterpreter(element, annotation);
