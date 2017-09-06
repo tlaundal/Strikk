@@ -14,6 +14,10 @@
         <module>example</module>
     </modules>
 
+    <properties>
+        <encoding>UTF-8</encoding>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.spigotmc</groupId>
