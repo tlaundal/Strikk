@@ -70,6 +70,7 @@ public class PermissionsImplementationGenerator {
                 .build();
 
         return TypeSpec.classBuilder(implementationName)
+                .addModifiers(Modifier.PUBLIC)
                 .addSuperinterface(TypeName.get(superinterface.asType()))
                 .addAnnotation(fetchableAnnotation)
                 .addField(pluginManagerField)
