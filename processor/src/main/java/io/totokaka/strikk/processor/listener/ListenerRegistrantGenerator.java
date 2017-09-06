@@ -8,6 +8,7 @@ import io.totokaka.strikk.internal.ListenerRegistrant;
 import io.totokaka.strikk.internal.annotations.Registerable;
 
 import javax.inject.Inject;
+import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 
 public class ListenerRegistrantGenerator {
@@ -21,6 +22,7 @@ public class ListenerRegistrantGenerator {
         ParameterSpec parameter = ParameterSpec.builder(TypeName.get(type.asType()), "listener").build();
 
         this.constructor = MethodSpec.constructorBuilder()
+                .addModifiers(Modifier.PUBLIC)
                 .addAnnotation(Inject.class)
                 .addParameter(parameter)
                 .addStatement("super($N)", parameter)
@@ -29,6 +31,7 @@ public class ListenerRegistrantGenerator {
 
     public TypeSpec generate() {
         return TypeSpec.classBuilder(implementationName)
+                .addModifiers(Modifier.PUBLIC)
                 .superclass(ListenerRegistrant.class)
                 .addAnnotation(Registerable.class)
                 .addMethod(constructor)

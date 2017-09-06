@@ -64,6 +64,7 @@ public class PermissionsImplementationGenerator {
     public TypeSpec generate() {
         ParameterSpec pluginManagerParameter = ParameterSpec.builder(PluginManager.class, "pluginManager").build();
         MethodSpec constructor = MethodSpec.constructorBuilder()
+                .addModifiers(Modifier.PUBLIC)
                 .addAnnotation(Inject.class)
                 .addParameter(pluginManagerParameter)
                 .addStatement("this.$N = $N", pluginManagerField, pluginManagerParameter)

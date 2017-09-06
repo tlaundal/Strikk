@@ -55,6 +55,7 @@ public class CommandRegistrantGenerator {
                 .build();
 
         this.constructor = MethodSpec.constructorBuilder()
+                .addModifiers(Modifier.PUBLIC)
                 .addAnnotation(Inject.class)
                 .addParameter(commandParameter)
                 .addStatement("this.$N = $N", commandField, commandParameter)
@@ -63,6 +64,7 @@ public class CommandRegistrantGenerator {
 
     public TypeSpec generate() {
         return TypeSpec.classBuilder(implementationName)
+                .addModifiers(Modifier.PUBLIC)
                 .addSuperinterface(Registrant.class)
                 .addAnnotation(Registerable.class)
                 .addAnnotation(registeredCommandAnnotation)
