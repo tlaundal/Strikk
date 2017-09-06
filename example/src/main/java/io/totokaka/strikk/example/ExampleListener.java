@@ -5,7 +5,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import javax.inject.Inject;
+
 public class ExampleListener implements Listener {
+
+    @Inject
+    public ExampleListener() {
+    }
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
