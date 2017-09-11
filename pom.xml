@@ -7,7 +7,7 @@
     <groupId>io.totokaka.strikk</groupId>
     <artifactId>strikk</artifactId>
     <packaging>pom</packaging>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <modules>
         <module>annotations</module>
         <module>processor</module>
