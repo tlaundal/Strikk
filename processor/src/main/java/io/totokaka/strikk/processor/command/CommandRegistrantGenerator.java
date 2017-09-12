@@ -33,13 +33,14 @@ public class CommandRegistrantGenerator {
 
     public void setCommandName(String commandName) {
         this.commandName = commandName;
-        this.implementationName = commandName + "Registrant";
-
-        this.implementationName = String.valueOf(this.implementationName.charAt(0)).toUpperCase() + implementationName.substring(1);
     }
 
+    public void setImplementationBaseName(String baseName) {
+        this.implementationName = baseName + "Registrant";
+    }
 
     public void setType(TypeElement type) {
+        this.setImplementationBaseName(type.getSimpleName().toString());
         TypeName typeName = TypeName.get(type.asType());
 
         this.commandField = FieldSpec.builder(typeName, "executor")
