@@ -4,6 +4,7 @@ import com.squareup.javapoet.*;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeMirror;
@@ -70,6 +71,7 @@ public class StrikkGenerator {
 
     public TypeSpec generate() {
         return TypeSpec.classBuilder("Strikk")
+                .addAnnotation(Singleton.class)
                 .addMethod(constructor.build())
                 .addFields(fields)
                 .addMethod(registerMethod.build())
