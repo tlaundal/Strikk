@@ -8,6 +8,11 @@
     <artifactId>strikk</artifactId>
     <packaging>pom</packaging>
     <version>1.0.1-SNAPSHOT</version>
+
+    <name>Strikk</name>
+    <description>An annotation processor to ease the development of Bukkit plugins.</description>
+    <url>https://github.com/totokaka/Strikk</url>
+
     <modules>
         <module>annotations</module>
         <module>processor</module>
