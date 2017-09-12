@@ -79,19 +79,33 @@ public class PluginYmlGenerator {
 
     public void addPermission(String name, String description, PermissionDefault defaultAccess, Map<String, Boolean> children) {
         Map<String, Object> values = new HashMap<>();
-        values.put("description", description);
         values.put("default", defaultAccess.getValue());
-        values.put("children", children);
+        if (description.length() > 0) {
+            values.put("description", description);
+        }
+        if (children.size() > 0) {
+            values.put("children", children);
+        }
         permissions.put(name, values);
     }
 
     public void addCommand(String name, String description, String[] aliases, String permission, String permissionMessage, String usage) {
         Map<String, Object> values = new HashMap<>();
-        values.put("description", description);
-        values.put("aliases", aliases);
-        values.put("permission", permission);
-        values.put("permission-message", permissionMessage);
-        values.put("usage", usage);
+        if (description.length() > 0) {
+            values.put("description", description);
+        }
+        if (aliases.length > 0) {
+            values.put("aliases", aliases);
+        }
+        if (permission.length() > 0) {
+            values.put("permission", permission);
+        }
+        if (permissionMessage.length() > 0) {
+            values.put("permission-message", permissionMessage);
+        }
+        if (usage.length() > 0) {
+            values.put("usage", usage);
+        }
         commands.put(name, values);
     }
 
@@ -99,19 +113,35 @@ public class PluginYmlGenerator {
         Map<String, Object> map = new HashMap<>();
         map.put("name", name);
         map.put("version", version);
-        map.put("description", description);
+        if (description.length() > 0) {
+            map.put("description", description);
+        }
         map.put("load", loadTime.getValue());
-        map.put("author", author);
-        map.put("authors", authors);
-        map.put("website", website);
+        if (author.length() > 0) {
+            map.put("author", author);
+        }
+        if (authors.length > 0) {
+            map.put("authors", authors);
+        }
+        if (website.length() > 0) {
+            map.put("website", website);
+        }
         map.put("main", main);
         map.put("database", usesDatabase);
-        map.put("depend", dependencies.get(DependencyType.HARD));
-        map.put("prefix", prefix);
-        map.put("softdepend", dependencies.get(DependencyType.SOFT));
-        map.put("loadbefore", dependencies.get(DependencyType.LOAD_BEFORE));
-        map.put("commands", commands);
-        map.put("permissions", permissions);
+        if (dependencies.size() > 0) {
+            map.put("depend", dependencies.get(DependencyType.HARD));
+            map.put("softdepend", dependencies.get(DependencyType.SOFT));
+            map.put("loadbefore", dependencies.get(DependencyType.LOAD_BEFORE));
+        }
+        if (prefix.length() > 0) {
+            map.put("prefix", prefix);
+        }
+        if (commands.size() > 0) {
+            map.put("commands", commands);
+        }
+        if (permissions.size() > 0) {
+            map.put("permissions", permissions);
+        }
 
         DumperOptions dumperOptions = new DumperOptions();
         dumperOptions.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
