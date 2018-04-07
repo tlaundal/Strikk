@@ -7,7 +7,7 @@
     <groupId>io.totokaka.strikk</groupId>
     <artifactId>strikk</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.0.2</version>
 
     <name>Strikk</name>
     <description>An annotation processor to ease the development of Bukkit plugins.</description>
