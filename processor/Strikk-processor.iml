@@ -11,7 +11,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="Strikk-annotations" />
+    <orderEntry type="library" name="Maven: io.totokaka.strikk:strikk-annotations:1.0.4-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: com.google.auto.service:auto-service:1.0-rc3" level="project" />
     <orderEntry type="library" name="Maven: com.google.auto:auto-common:0.3" level="project" />
     <orderEntry type="library" name="Maven: com.google.guava:guava:19.0" level="project" />
